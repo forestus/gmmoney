@@ -24,7 +24,7 @@ createServer({
           type: 'withdraw',
           category: 'Casa',
           ammount: 1100,
-          createdAt: new Date('2021-12-27 20:00:11'),
+          createdAt: new Date('2021-11-11 20:00:11'),
         },
         {
           id: 3,
@@ -32,7 +32,7 @@ createServer({
           type: 'withdraw',
           category: 'Casa',
           ammount: 2000,
-          createdAt: new Date('2022-01-12 19:11:10'),
+          createdAt: new Date('2022-11-11 19:11:10'),
         },
       ],
     });

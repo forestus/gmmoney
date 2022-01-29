@@ -4,7 +4,7 @@ import entrada from '../../assets/entrada.svg';
 import saida from '../../assets/saida.svg';
 import { Container, RadioBox, TransactionTypeContainer } from './styles';
 import { FormEvent, useState } from 'react';
-import { api } from '../../services/api';
+import { useTransactions } from '../../hooks/useTransactions';
 interface NewTransactionModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
@@ -13,22 +13,24 @@ export function NewTransactionModal({
   isOpen,
   onRequestClose,
 }: NewTransactionModalProps) {
+  const { CreateTransaction } = useTransactions();
   const [title, setTitle] = useState('');
-  const [value, setValue] = useState(0);
+  const [ammount, setAmmount] = useState(0);
   const [category, setCategory] = useState('');
-  const [type, setType] = useState('deposit');
-  function handleCreatenewTransaction(event: FormEvent) {
+  const [type, setType] = useState<'deposit' | 'withdraw'>('deposit');
+  async function handleCreatenewTransaction(event: FormEvent) {
     event.preventDefault();
-    onRequestClose();
-    const data = {
+    await CreateTransaction({
       title,
-      value,
       type,
+      ammount,
       category,
-    };
-    api
-      .post('/transactions', data)
-      .then((response) => console.log(response.data));
+    });
+    setTitle('');
+    setAmmount(0);
+    setCategory('');
+    setType('deposit');
+    onRequestClose();
   }
   return (
     <Modal
@@ -54,8 +56,8 @@ export function NewTransactionModal({
         <input
           type="number"
           placeholder="Valor"
-          value={value}
-          onChange={(event) => setValue(Number(event.target.value))}
+          value={ammount}
+          onChange={(event) => setAmmount(Number(event.target.value))}
         />
         <TransactionTypeContainer>
           <RadioBox
